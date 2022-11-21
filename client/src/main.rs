@@ -41,26 +41,26 @@ fn main() {
         
     
 
-        let mut input = String::new();
-        let mut reader = BufReader::new(std::io::stdin());
+        // let mut input = String::new();
+        // let mut reader = BufReader::new(std::io::stdin());
         // send messages
         loop {
             let agent_ip_port = format!("{}:{}", ip, agent_port);
             buf = [0; 1024];
             
             // send a message to the agent
-            // let message = format!("{}" ,port); // if load balancing is tested
-            // socket.send_to(input.as_bytes(), agent_ip_port).unwrap();
-            // //sleep for 100 ms
-            // std::thread::sleep(std::time::Duration::from_millis(100));
+            let message = format!("{}" ,port); // if load balancing is tested
+            socket.send_to(message.as_bytes(), agent_ip_port).unwrap();
+            //sleep for 100 ms
+            std::thread::sleep(std::time::Duration::from_millis(100));
             
             //take input from user
-            reader.read_line(&mut input).unwrap();
+            // reader.read_line(&mut input).unwrap();
             //send input to agent
 
 
-            socket.send_to(input.as_bytes(), agent_ip_port).unwrap();
-            input.clear();
+            // socket.send_to(input.as_bytes(), agent_ip_port).unwrap();
+            // input.clear();
             let (amt, src) = socket.recv_from(&mut buf).unwrap();
             println!("{} bytes received from {}", amt, src);
             println!("message: {}", String::from_utf8_lossy(&buf[..amt]));
@@ -77,3 +77,6 @@ fn main() {
     
 
 }
+
+
+
