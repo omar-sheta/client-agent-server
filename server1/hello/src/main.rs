@@ -18,8 +18,8 @@ fn main() {
     // get port number from terminal
     
     let server_port = std::env::args().nth(1).unwrap();
-    let agent_port = std::env::args().nth(2).unwrap();
-    let server_num = std::env::args().nth(3).unwrap();
+    // let agent_port = std::env::args().nth(2).unwrap();
+    let server_num = std::env::args().nth(2).unwrap();
 
     // send a message to the agent
 
@@ -34,14 +34,16 @@ fn main() {
     let mut buf = [0; 1024];
 for _ in 0..1000000 {
     //read from the socket
-    let agent_ip_port = format!("{}:{}", ip, agent_port);
+    // let agent_ip_port = format!("{}:{}", ip, agent_port);
     let (amt, src) = socket.recv_from(&mut buf).unwrap();
     //print the message
     println!("{} bytes received from {}", amt, src);
+    let agent_ip_port = src.to_string();
+
     println!("message: {}", String::from_utf8_lossy(&buf[..amt]));
     buf = [0; 1024];
     //send a message back to the agent
-    let message = format!("Hello from the server: {}", server_num);;
+    let message = format!("Hello from the server: {}", server_num);
     
     
     socket.send_to(message.as_bytes(), agent_ip_port).unwrap();

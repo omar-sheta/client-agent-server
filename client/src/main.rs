@@ -52,7 +52,7 @@ fn main() {
             let message = format!("{}" ,port); // if load balancing is tested
             socket.send_to(message.as_bytes(), agent_ip_port).unwrap();
             //sleep for 100 ms
-            std::thread::sleep(std::time::Duration::from_millis(100));
+            std::thread::sleep(std::time::Duration::from_millis(2000));
             
             //take input from user
             // reader.read_line(&mut input).unwrap();

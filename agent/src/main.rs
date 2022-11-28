@@ -16,19 +16,15 @@ fn main() {
     // get port number from terminal
 
     let agent_port = std::env::args().nth(1).unwrap();
-    
-    let client1_port = std::env::args().nth(2).unwrap();
-    let client2_port = std::env::args().nth(3).unwrap();
 
-
-    let server1_port = std::env::args().nth(4).unwrap();
-    let server2_port = std::env::args().nth(5).unwrap();
-    let server3_port = std::env::args().nth(6).unwrap();
+    let server1_port = std::env::args().nth(2).unwrap();
+    let server2_port = std::env::args().nth(3).unwrap();
+    let server3_port = std::env::args().nth(4).unwrap();
 
     //create array of server ports
     let server_ports = [server1_port, server2_port, server3_port];
     //create array of client ports
-    let client_ports = [client1_port, client2_port];
+    // let client_ports = [client1_port, client2_port];
 
     // send a message to the agent
 
