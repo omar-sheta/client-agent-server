@@ -1,6 +1,10 @@
-//agent to connect client to server using udp
 use std::net::UdpSocket;
 use local_ip_address::local_ip;
+use std::collections::HashMap;
+use std::io::BufReader;
+
+
+
 // port number of client1 = 7877
 // port num of client2 = 7878
 // port num of agent = 7879
@@ -21,24 +25,76 @@ fn main() {
     let server2_port = std::env::args().nth(3).unwrap();
     let server3_port = std::env::args().nth(4).unwrap();
 
-    //create array of server ports
+
+    //create array of server ports that can be used to send to
     let server_ports = [server1_port, server2_port, server3_port];
+
+    let server_ports1 = server_ports.clone();
+
+
+    // //map between server address and boolean true if server is available and false if not
+    // let mut server_map = HashMap::new();
+
+
+
+    //initialize server map of string and bool
+    let mut server_map = HashMap::new();
+    
+    for server in server_ports {
+        server_map.insert(server, true);
+    }
+
+    
     //create array of client ports
     // let client_ports = [client1_port, client2_port];
 
     // send a message to the agent
 
     let ip_and_port_agent = format!("{}:{}", ip, agent_port);
-    let mut agent_socket = UdpSocket::bind(ip_and_port_agent).unwrap();
+    let agent_socket = UdpSocket::bind(ip_and_port_agent).unwrap();
+
+
+    //wait for a message from server
+    let mut buf = [0; 10];
+    let (amt, src) = agent_socket.recv_from(&mut buf).unwrap();
+
+    //let dead_server = src.to_string();
+    let dead_server = src.port().to_string();
+    
+    
+    println!("Server:{} is Dead", src);
+
+    //if message is "Dead" then set server to false
+    if buf[0] == 68 && buf[1] == 101 && buf[2] == 97 && buf[3] == 100 {
+        server_map.insert(dead_server, false);
+    }
+
+
+    
+    
+
     let mut buf = [0; 1023];
     for i in 0..20000000{
-    //change server port to send to different server
+   
+
+    let mut server_port = server_ports1[i%3].clone();
+
+    if server_map.get(&server_port) == Some(&true) {
+        let ip_and_port_server = format!("{}:{}", ip, server_port);
+    }
+    else{
+
+        let dead_server = server_port.clone();
+        // println!("Server {}:{} is dead",ip, dead_server);
+        //skip this iteration
+        continue;
+    }
     
-    // thread to receive and send to client
-    let server_port = server_ports[i%3].clone();
-    // let ip_and_port_client = format!("{}:{}", ip, client_ports[i%2]);
-    // println!("ip and port of client is {}", ip_and_port_client);
-    let ip_and_port_server = format!("{}:{}", ip, server_ports[i%3]);
+
+    
+
+
+    let ip_and_port_server = format!("{}:{}", ip, server_port);
     // listen for messages from different clients
         
         
