@@ -112,8 +112,8 @@ fn main() {
             } else {
                 let message = format!("Alive");
                 // // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
-                // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7884")).unwrap(); // send to agent 1
-                // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
+                socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7884")).unwrap(); // send to agent 1
+                socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
                 let req = rx_message.recv().unwrap();
                 
                 let message = format!("{}", req);
