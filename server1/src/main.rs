@@ -44,9 +44,9 @@ fn main() {
 
 
     //sleep for 2 seconds
-    thread::sleep(Duration::from_secs(5));
-    socket_listen.send_to("hi".as_bytes(), format!("{}:{}", local_ip, "7878")).unwrap(); //sending server number to agent1
-
+    thread::sleep(Duration::from_secs(2));
+    // socket_listen.send_to("hi".as_bytes(), format!("{}:{}", local_ip, "7878")).unwrap(); //sending server number to agent1
+    // socket_listen.send_to("hi".as_bytes(), format!("{}:{}", local_ip, "7879")).unwrap(); //sending server number to agent1
     //clone listen socket
 
     let socket_listen_clone = socket_listen.try_clone().unwrap();
@@ -56,7 +56,7 @@ fn main() {
 
 
     let (tx_message, rx_message) : (Sender<String>, Receiver<String>) = mpsc::channel();
-    // let (tx_address, rx_address) : (Sender<String>, Receiver<String>) = mpsc::channel();
+    let (tx_address, rx_address) : (Sender<String>, Receiver<String>) = mpsc::channel();
 
     // create a thread to listen to messages from the agent 
     let handle = thread::spawn(move || {
@@ -74,10 +74,11 @@ fn main() {
 
                     //send message to the other thread
                     tx_message.send(request).unwrap();
+                    tx_address.send(src.to_string()).unwrap();
                     //send address to the other thread
                     // tx_address.send(src.to_string()).unwrap();
                     //print src
-                    println!("Address: {}", src);
+                    // println!("Address: {}", src);
 
 
                 }
@@ -93,17 +94,16 @@ fn main() {
     let handle2 = thread::spawn(move || {
         for i in 0..i32::MAX {
 
-            // let address = rx_address.recv().unwrap();
-
-            // println!("address: {}", address);
+            
 
 
             if server_num == "1" {
             
 
                 let message = format!("Dead");
+                // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
+                socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7884")).unwrap(); // send to agent 1
                 socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
-
                 println!("Sending: {} then I will sleep for 10 mins", message);
 
                 thread::sleep(Duration::from_secs(600));
@@ -113,14 +113,21 @@ fn main() {
                 let req = rx_message.recv().unwrap();
                 
                 let message = format!("{}", req);
-                socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap();
+
+                let address = rx_address.recv().unwrap();
+
+                println!("address: {}", address);
+                // print sending to address
+                // println!("Sending response: {} ", message);
+                // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap();
+                socket_listen_clone.send_to(message.as_bytes(), address).unwrap(); // send to agent 1
             }
 
             
 
 
             //sleep for 2 seconds
-            thread::sleep(Duration::from_millis(2000));
+            thread::sleep(Duration::from_millis(1000));
         }
     });
 

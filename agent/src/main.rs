@@ -188,7 +188,7 @@ fn main(){
             println!("Client thread");
 
             let received = rx.recv().unwrap();
-            println!("Received from channel: {:?}", received);
+            // println!("Received from channel: {:?}", received);
             let received_2 = received.clone();
 
 
@@ -224,6 +224,9 @@ fn main(){
                     //     server = servers[(i+2)%3].clone();
                     // }
                     //send the message to the server
+
+
+                    println!("Selected server: {}", server);
                     server_socket_clone.send_to(&buf[..amt], server).unwrap();
 
 
