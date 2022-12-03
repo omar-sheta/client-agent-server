@@ -45,8 +45,8 @@ fn main() {
 
     //sleep for 2 seconds
     thread::sleep(Duration::from_secs(2));
-    // socket_listen.send_to("hi".as_bytes(), format!("{}:{}", local_ip, "7878")).unwrap(); //sending server number to agent1
-    // socket_listen.send_to("hi".as_bytes(), format!("{}:{}", local_ip, "7879")).unwrap(); //sending server number to agent1
+    // socket_listen.send_to("Alive".as_bytes(), format!("{}:{}", local_ip, "7878")).unwrap(); //sending server number to agent1
+    // socket_listen.send_to("Alive".as_bytes(), format!("{}:{}", local_ip, "7879")).unwrap(); //sending server number to agent2
     //clone listen socket
 
     let socket_listen_clone = socket_listen.try_clone().unwrap();
@@ -110,6 +110,10 @@ fn main() {
 
 
             } else {
+                let message = format!("Alive");
+                // // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
+                // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7884")).unwrap(); // send to agent 1
+                // socket_listen_clone.send_to(message.as_bytes(), format!("{}:{}",local_ip,"7882")).unwrap(); // send to agent 2
                 let req = rx_message.recv().unwrap();
                 
                 let message = format!("{}", req);

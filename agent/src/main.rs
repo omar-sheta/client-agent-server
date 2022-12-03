@@ -134,7 +134,7 @@ fn main(){
                     //print received message from server
                     
                     //print received message from server
-                    println!("Received from server: {}", String::from_utf8_lossy(&buf[..amt]));
+                    // println!("Received from server: {}", String::from_utf8_lossy(&buf[..amt]));
                     let received = String::from_utf8_lossy(&buf[..amt]);
                     //check if the message is "Dead"
                     //clone the server_status hashmap
@@ -147,6 +147,15 @@ fn main(){
                         println!("Server {} is dead", src.to_string());
 
                         //print the status of the servers
+                    }else if received == "Alive"{
+                        server_status.insert(src.to_string(), true);
+                        //print the status of the server
+                        // println!("Server {} is dead", src.to_string());
+
+                    }
+                    else{
+                        //forward the message to the client
+                        tx2.send(received.to_string()).unwrap();
                     }
 
                     //print sendig server status
@@ -195,7 +204,7 @@ fn main(){
             match cleint_socket.recv_from(&mut buf) {
                 Ok((amt, src)) => {
                     //print received message from client
-                    println!("Received: ({})", String::from_utf8_lossy(&buf[..amt]));
+                    // println!("Received: ({})", String::from_utf8_lossy(&buf[..amt]));
                     
                     
                     //select a server to send the message to

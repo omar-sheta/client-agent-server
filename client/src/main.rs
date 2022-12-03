@@ -35,7 +35,7 @@ fn main() {
     // create a thread to send messages to the agent
     let handle = thread::spawn(move || {
         for i in 0..i32::MAX {
-            println!("Sending message to agent {}",agent_port);
+            // println!("Sending message to agent {}",agent_port);
 
             let message = format!("Send me data({})", i);
             socket_send.send_to(message.as_bytes(), format!("{}:{}", local_ip, agent_port)).unwrap();
