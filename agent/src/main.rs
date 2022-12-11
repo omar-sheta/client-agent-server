@@ -110,7 +110,6 @@ fn main(){
     let server_socket_clone = server_socket.try_clone().unwrap();
 
     let mut buf = [0; 1024];
-    let mut buf2 = [0; 1024];
 
     //create a channel
     let (tx, rx) : (Sender<HashMap<String,bool>>, Receiver<HashMap<String,bool>>) = mpsc::channel();
@@ -128,7 +127,7 @@ fn main(){
     let handle = thread::spawn(move || {
         loop {
 
-            println!("Listening to server");
+            // println!("Listening to server");
             match server_socket.recv_from(&mut buf) {
                 Ok((amt, src)) => {
                     //print received message from server
@@ -159,7 +158,7 @@ fn main(){
                     }
 
                     //print sendig server status
-                    println!("Server status: {:?}", server_status);
+                    // println!("Server status: {:?}", server_status);
                     //send the server_status hashmap to the client thread
                     tx.send(server_status_clone);
                     //send the message to the client thread
@@ -173,7 +172,7 @@ fn main(){
                     println!("recv_from function failed: {:?}", e);
                 }
             }
-            thread::sleep(Duration::from_millis(100));
+            // thread::sleep(Duration::from_millis(100));
         }
     });
 
@@ -213,8 +212,8 @@ fn main(){
                     //check if the server is alive
                     if received_2.get(&server).unwrap() == &false {
                         //if the server is dead, select the next server
-                        i = i + 1;
-                        server = servers[(i)%3].clone();
+                        // i = i + 1;
+                        server = servers[(i+1)%3].clone();
 
                     }
 
@@ -235,7 +234,7 @@ fn main(){
                     //send the message to the server
 
 
-                    println!("Selected server: {}", server);
+                    // println!("Selected server: {}", server);
                     server_socket_clone.send_to(&buf[..amt], server).unwrap();
 
 
@@ -259,7 +258,7 @@ fn main(){
                 // println!("Server2: {}", server_status.get(&server2).unwrap());
                 // println!("Server3: {}", server_status.get(&server3).unwrap());
             
-            thread::sleep(Duration::from_millis(100));
+            // thread::sleep(Duration::from_millis(100));
         }
     });
    
@@ -278,7 +277,7 @@ fn main(){
         }
 
 
-            thread::sleep(Duration::from_millis(100));
+            // thread::sleep(Duration::from_millis(100));
         
     });
 

@@ -40,7 +40,7 @@ fn main() {
             let message = format!("Send me data({})", i);
             socket_send.send_to(message.as_bytes(), format!("{}:{}", local_ip, agent_port)).unwrap();
             //sleep for 1 second
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_millis(100));
         }
     });
 
